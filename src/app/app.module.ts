@@ -14,6 +14,9 @@ import {ParentTaskService} from './parent-task.service';
 import {ProjectService} from './project.service';
 import {TaskService} from './task.service';
 import {UserService} from './user.service';
+import { FilterPipe } from './Pipes/filter.pipe';
+import { SortPipe } from './Pipes/sort.pipe';
+
 
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ import {UserService} from './user.service';
     ProjectComponent,
     AddtaskComponent,
     ViewtaskComponent,
-    MenuComponent
+    MenuComponent,
+    FilterPipe,
+    SortPipe
+    
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,21 @@
+.btn-circle { width: 40px; height: 40px; text-align: center;padding: 6px 0;font-size: 12px;line-height: 1.428571429;border-radius: 15px;}
+.label-small {
+    vertical-align: super;
+    font-size: small;
+  }
+  .label-xsmall {
+   
+    font-size: 12px;
+  }
+  input[type="date"]::before { 
+	content: attr(data-placeholder);
+	width: 100%;
+}
+
+
+input[type="date"]:focus::before,
+input[type="date"]:valid::before { display: none }
+
+.btncustom {
+    width: 100px !important;
+}
