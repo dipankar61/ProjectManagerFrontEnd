@@ -16,6 +16,9 @@ import {TaskService} from './task.service';
 import {UserService} from './user.service';
 import { FilterPipe } from './Pipes/filter.pipe';
 import { SortPipe } from './Pipes/sort.pipe';
+import { UserSearchComponent } from './user-search/user-search.component';
+import { MatDialogModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -27,7 +30,8 @@ import { SortPipe } from './Pipes/sort.pipe';
     ViewtaskComponent,
     MenuComponent,
     FilterPipe,
-    SortPipe
+    SortPipe,
+    UserSearchComponent
     
   ],
   imports: [
@@ -36,8 +40,11 @@ import { SortPipe } from './Pipes/sort.pipe';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MatTableModule
+    MatTableModule,
+    MatDialogModule,
+    BrowserAnimationsModule
   ],
+  entryComponents: [UserSearchComponent],
   providers: [ParentTaskService,ProjectService,TaskService,UserService],
   bootstrap: [AppComponent]
 })

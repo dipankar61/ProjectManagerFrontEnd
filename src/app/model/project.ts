@@ -9,3 +9,4 @@ export class Project {
     NoOfTask:number;
     NoOfTaskCompleted:number
 }
+

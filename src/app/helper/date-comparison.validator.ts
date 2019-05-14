@@ -10,7 +10,7 @@ export function DateComparison(startDatecontrolName: string, EndDateControlName:
             {
                 if(stcontrol.value>endControl.value)
                 {
-                    endControl.setErrors({ failComparison: true });
+                    endControl.setErrors({ DateComparison: true });
                 }
                 else{
                     endControl.setErrors(null);
@@ -18,7 +18,7 @@ export function DateComparison(startDatecontrolName: string, EndDateControlName:
 
             }
             else{
-                endControl.setErrors({ failComparison: true });
+                endControl.setErrors({ DateComparison: true });
 
             }
 

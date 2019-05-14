@@ -21,7 +21,7 @@ export class ProjectService {
     return this.http.post(this.ProjectApiUrl,value);
 
   }
-  EditTask(value:Project):Observable<any>{
+  EditProject(value:Project):Observable<any>{
     return this.http.put(this.ProjectApiUrl,value);
 
   }

@@ -57,7 +57,7 @@
     <div class="alert alert-danger" *ngIf="f.EndDate.errors">End date must be greater than Start date</div>
   </div>
   
-   <div class="form-group row" style="padding-left:3rem;padding-top:1rem">
+   <div class="form-group row" style="padding-left:3rem;">
       <label  class="control-label col-lg-2" style="text-align: left">Priority:</label>
        <div class="col-lg-6">
         <input type="range" min="0" max="30" class="custom-range" id="inputPriority" 
@@ -72,7 +72,7 @@
         <input type="text" class="form-control" id="mName"  maxlength="100" formControlName="Manager" >
        </div>
        <div class="col-lg-1">
-        <button type="button" class="btn btn-sm btn-circle" (click)="ResetForm()">Search</button>
+        <button type="button" class="btn btn-sm btn-circle" (click)="OpenModal()">Search</button>
         
        </div>
     </div>

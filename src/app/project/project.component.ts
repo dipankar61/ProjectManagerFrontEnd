@@ -5,7 +5,9 @@ import { Http, Request, RequestOptions, RequestOptionsArgs, Response, XHRBackend
 import { error } from '@angular/compiler/src/util';
 import {ProjectService} from '../project.service';
 import{Project} from '../model/project';
-import{DateComparison} from '../helper/date-comparison.validator'
+import{DateComparison} from '../helper/date-comparison.validator';
+import { MatDialog } from '@angular/material';
+import { UserSearchComponent } from '../user-search/user-search.component';
 
 @Component({
   selector: 'app-project',
@@ -26,8 +28,9 @@ export class ProjectComponent implements OnInit {
   isSetDateCheck=false;
   startDate:Date;
   endDate:Date;
+  userId:number;
 
-  constructor(private projService:ProjectService,private formBuilder: FormBuilder) { }
+  constructor(private projService:ProjectService,private formBuilder: FormBuilder,private dialog: MatDialog,) { }
 
   ngOnInit() {
      this.projectForm=this.formBuilder.group({
@@ -67,5 +70,83 @@ export class ProjectComponent implements OnInit {
     }
 
   }
+  OpenModal() {
+    const dialogRef = this.dialog.open(UserSearchComponent, {
+      width: '600px',
+      height: '400px',
+      data: ''
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.projectForm.patchValue({ Manager: result.FirstName + ' ' + result.LastName });
+      this.userId = result.UserId;
+    });
+  }
+  onSubmit(){
+    this.isError=false;
+    this.isSuccess=false;
+    this.model.ProjectName=this.projectForm.value.projectName;
+    this.model.Priority=this.projectForm.value.Priority;
+    if(this.userId)
+      this.model.UserId=this.userId;
+      this.model.Username=this.projectForm.value.Manager;
+    if(this.projectForm.value===true)
+    {
+       this.model.StartDate=this.projectForm.value.StartDate;
+       this.model.EndDate=this.projectForm.value.EndDate;
+    }
+    if(!this.isEdit)
+       this.AddProject()
+     else
+     {
+       this.EditProject();
+     }
+
+ }
+  AddProject()
+  {
+    this.projService.AddProject(this.model).subscribe(data=>{
+      this.isSuccess=true;
+      this.successMsg="Project has been added successfully";
+      this.GetAllProjects();
+    },
+      (error:Error)=>this.HandleError(error,"onSubmit"));
+  }
+  EditProject()
+  {
+    this.projService.EditProject(this.model).subscribe(data=>{
+      this.isSuccess=true;
+      this.successMsg="Project has been updated successfully";
+      this.GetAllProjects();
+    },
+      (error:Error)=>this.HandleError(error,"onSubmit"));
+  }
+  
+  GetAllProjects()
+  {
+     this.projService.GetProjects().subscribe(data=>
+      {
+        this.projects=data;
+      },
+      (error:any)=>{this.HandleError(error,"GetAllProjects")}
+     );
+
+  }
+  HandleError(err:any,orgOfError:string)
+  {
+    if((err.status===500|| err.status===0) )
+    {
+      this.isError=true;
+      this.errorMsg=orgOfError==="onSubmit"?"System error. Please try again later":"Users loading failed";
+
+    }
+    
+    if(err.status===400 )
+    {
+      this.isError=true;
+      this.errorMsg=err.error.Message;
+      
+    }
+  }
+
 
 }
