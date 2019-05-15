@@ -1,8 +1,8 @@
 export class Project {
     ProjectId:number;
     ProjectName:string;
-    StartDate:Date;
-    EndDate:Date;
+    StartDate:string;
+    EndDate:string;
     Priority:number;
     UserId:number;
     Username:string;

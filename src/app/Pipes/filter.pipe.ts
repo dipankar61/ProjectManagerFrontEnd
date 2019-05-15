@@ -12,6 +12,8 @@ export class FilterPipe implements PipeTransform {
     args = args.toLowerCase();
     if(key==='user')
       return this.FilterUser(value,args);
+    if(key==='Project')
+      return this.FilterProject(value,args);
     else
      return value;
   
@@ -22,6 +24,19 @@ export class FilterPipe implements PipeTransform {
       if((it.FirstName.toLowerCase().indexOf(args.toLowerCase()) == -1) && 
          (it.LastName.toLowerCase().indexOf(args.toLowerCase()) == -1) &&
          (JSON.stringify(it.EmployeeId).toLowerCase().indexOf(args.toLowerCase()) == -1)
+      )
+       return false;
+      else
+       return true;
+    });
+
+  }
+  FilterProject(value: any[],args:any):any[]{
+    return value.filter(it => {
+      if((it.ProjectName.toLowerCase().indexOf(args.toLowerCase()) == -1) && 
+         (JSON.stringify(it.StartDate).toLowerCase().indexOf(args.toLowerCase()) == -1) &&
+         (JSON.stringify(it.EndDate).toLowerCase().indexOf(args.toLowerCase()) == -1) &&
+         (JSON.stringify(it.Priority).toLowerCase().indexOf(args.toLowerCase()) == -1)
       )
        return false;
       else

@@ -8,6 +8,7 @@ import{Project} from '../model/project';
 import{DateComparison} from '../helper/date-comparison.validator';
 import { MatDialog } from '@angular/material';
 import { UserSearchComponent } from '../user-search/user-search.component';
+import { projection } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-project',
@@ -45,6 +46,7 @@ export class ProjectComponent implements OnInit {
       validator: DateComparison('StartDate', 'EndDate','SetDate')
      }
      );
+     this.GetAllProjects();
   }
   get f() { return this.projectForm.controls; }
   SetStartEndDate(e:any)
@@ -86,13 +88,19 @@ export class ProjectComponent implements OnInit {
     this.isSuccess=false;
     this.model.ProjectName=this.projectForm.value.projectName;
     this.model.Priority=this.projectForm.value.Priority;
-    if(this.userId)
+    if(this.userId && this.projectForm.value.Manager && this.projectForm.value.Manager!=="")
+    {
       this.model.UserId=this.userId;
       this.model.Username=this.projectForm.value.Manager;
-    if(this.projectForm.value===true)
+    }
+    if(this.projectForm.value.SetDate===true)
     {
        this.model.StartDate=this.projectForm.value.StartDate;
        this.model.EndDate=this.projectForm.value.EndDate;
+    }
+    else{
+      this.model.StartDate=null;
+      this.model.EndDate==null;
     }
     if(!this.isEdit)
        this.AddProject()
@@ -102,6 +110,45 @@ export class ProjectComponent implements OnInit {
      }
 
  }
+ OnEdit(proj:Project)
+ {
+ 
+  this.isEdit = true;
+  this.model=proj;
+  let stdate:string="";
+  let eDate:String="";
+  let setCheckbox=false;
+  if(proj.StartDate!==undefined && proj.StartDate!==null )
+  {
+    stdate=new Date(proj.StartDate).toISOString().substring(0, 10);
+    setCheckbox=true;
+  }
+  if(proj.EndDate!==undefined && proj.EndDate!==null )
+  {
+    eDate=new Date(proj.EndDate).toISOString().substring(0, 10);
+  }
+  
+  this.projectForm.patchValue({
+    projectName: proj.ProjectName,
+    StartDate: stdate,
+    EndDate: eDate,
+    Priority: proj.Priority,
+    Manager:proj.Username,
+    SetDate: setCheckbox
+  });
+
+ }
+ OnSusPend(proj:Project){
+  this.model=proj;
+  this.EditProject();
+ }
+ ResetForm(){
+  this.isError=false;
+  this.isSuccess=false;
+  this.isEdit=false;
+  this.model==new Project();
+  this.projectForm.reset();
+}
   AddProject()
   {
     this.projService.AddProject(this.model).subscribe(data=>{
@@ -126,17 +173,31 @@ export class ProjectComponent implements OnInit {
      this.projService.GetProjects().subscribe(data=>
       {
         this.projects=data;
+        this.projects.forEach(item=>{
+          if(item.StartDate!==undefined && item.StartDate!==null )
+          {
+            item.StartDate=new Date(item.StartDate).toISOString().substring(0,10);
+          }
+          if(item.EndDate!==undefined && item.EndDate!==null )
+          {
+            item.EndDate=new Date(item.EndDate).toISOString().substring(0,10);
+          }
+        })
       },
       (error:any)=>{this.HandleError(error,"GetAllProjects")}
      );
 
+  }
+  SetSortParam(param: string) {
+    this.path = param;
+    this.order = this.order * -1;
   }
   HandleError(err:any,orgOfError:string)
   {
     if((err.status===500|| err.status===0) )
     {
       this.isError=true;
-      this.errorMsg=orgOfError==="onSubmit"?"System error. Please try again later":"Users loading failed";
+      this.errorMsg=orgOfError==="onSubmit"?"System error. Please try again later":"Projects loading failed";
 
     }
     
