@@ -41,6 +41,7 @@ export class ProjectComponent implements OnInit {
       EndDate:new FormControl({value:'',disabled:!this.isSetDateCheck}),
       Priority:new FormControl(),
       Manager:new FormControl({ value: '', disabled: true })
+     
      },
      {
       validator: DateComparison('StartDate', 'EndDate','SetDate')
@@ -87,11 +88,17 @@ export class ProjectComponent implements OnInit {
     this.isError=false;
     this.isSuccess=false;
     this.model.ProjectName=this.projectForm.value.projectName;
-    this.model.Priority=this.projectForm.value.Priority;
-    if(this.userId && this.projectForm.value.Manager && this.projectForm.value.Manager!=="")
+    if(this.projectForm.value.Priority)
+    {
+      this.model.Priority=this.projectForm.value.Priority;
+    }
+    else{
+      this.model.Priority=0;
+    }
+    if(this.userId)
     {
       this.model.UserId=this.userId;
-      this.model.Username=this.projectForm.value.Manager;
+      
     }
     if(this.projectForm.value.SetDate===true)
     {
@@ -100,7 +107,7 @@ export class ProjectComponent implements OnInit {
     }
     else{
       this.model.StartDate=null;
-      this.model.EndDate==null;
+      this.model.EndDate=null;
     }
     if(!this.isEdit)
        this.AddProject()
@@ -112,7 +119,8 @@ export class ProjectComponent implements OnInit {
  }
  OnEdit(proj:Project)
  {
- 
+  this.isError=false;
+  this.isSuccess=false;
   this.isEdit = true;
   this.model=proj;
   let stdate:string="";
@@ -122,12 +130,20 @@ export class ProjectComponent implements OnInit {
   {
     stdate=new Date(proj.StartDate).toISOString().substring(0, 10);
     setCheckbox=true;
+    this.projectForm.get('StartDate').enable();
   }
   if(proj.EndDate!==undefined && proj.EndDate!==null )
   {
     eDate=new Date(proj.EndDate).toISOString().substring(0, 10);
+    this.projectForm.get('EndDate').enable();
   }
-  
+  if(!setCheckbox)
+  {
+    this.projectForm.get('StartDate').disable();
+    this.projectForm.get('EndDate').disable();
+
+  }
+  this.userId=proj.UserId;
   this.projectForm.patchValue({
     projectName: proj.ProjectName,
     StartDate: stdate,
@@ -135,6 +151,7 @@ export class ProjectComponent implements OnInit {
     Priority: proj.Priority,
     Manager:proj.Username,
     SetDate: setCheckbox
+    
   });
 
  }
@@ -146,7 +163,10 @@ export class ProjectComponent implements OnInit {
   this.isError=false;
   this.isSuccess=false;
   this.isEdit=false;
-  this.model==new Project();
+  this.model=new Project();
+  this.userId=null;
+  this.projectForm.controls['Priority'].setValue(0);
+  
   this.projectForm.reset();
 }
   AddProject()
@@ -156,7 +176,9 @@ export class ProjectComponent implements OnInit {
       this.successMsg="Project has been added successfully";
       this.GetAllProjects();
     },
-      (error:Error)=>this.HandleError(error,"onSubmit"));
+      (error:Error)=>{this.HandleError(error,"onSubmit")
+      this.GetAllProjects();
+    });
   }
   EditProject()
   {
@@ -165,7 +187,9 @@ export class ProjectComponent implements OnInit {
       this.successMsg="Project has been updated successfully";
       this.GetAllProjects();
     },
-      (error:Error)=>this.HandleError(error,"onSubmit"));
+      (error:Error)=>{this.HandleError(error,"onSubmit")
+      this.GetAllProjects();
+    });
   }
   
   GetAllProjects()
@@ -189,6 +213,8 @@ export class ProjectComponent implements OnInit {
 
   }
   SetSortParam(param: string) {
+    this.isError=false;
+    this.isSuccess=false;
     this.path = param;
     this.order = this.order * -1;
   }
