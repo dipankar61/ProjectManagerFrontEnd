@@ -26,7 +26,7 @@
             Project name is required
          </div>
          <div class="alert alert-danger" 
-           *ngIf="f.firstName.errors.maxlength">
+           *ngIf="f.projectName.errors.maxlength">
             Project name should be max {{ nameField.errors.maxlength.requiredLength }} characters long
          </div>
       </div>
@@ -113,10 +113,10 @@
    </div>
  </div>
  <ul class="list-group-flush">
-  <li class="list-group-item" *ngFor="let project of projects | filter:'Project':searchParam | sort:path:order">
+  <li class="list-group-item " *ngFor="let project of projects | filter:'Project':searchParam | sort:path:order">
     
-      <div class="form-group row" >
-        <div class="col-lg-7 ">
+      <div class="form-group row " >
+        <div class="col-lg-7 bg-light">
           <div class="form-group row">
               <label  class="control-label  col-lg-3" style="text-align: left">Project:</label>
               <label  class="control-label  col-lg-9"  style="text-align: left">{{project.ProjectName}}</label>
@@ -136,9 +136,9 @@
         </div>
      
       
-        <div class="col-lg-1">
+        <div class="col-lg-1 bg-light">
             <label  class="control-label" style="text-align: left">Priority</label>
-            <label  class="control-label" style="text-align: left" >{{project.Priority}}</label>
+            <label  class="control-label" style="text-align: center" >{{project.Priority}}</label>
         </div>
         <div class="col-lg-1 ">
             <button type="button"  class="btn btn-light btncustom" (click)="OnEdit(project)">Edit</button>

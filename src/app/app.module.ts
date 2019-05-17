@@ -19,6 +19,8 @@ import { SortPipe } from './Pipes/sort.pipe';
 import { UserSearchComponent } from './user-search/user-search.component';
 import { MatDialogModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ProjectSearchComponent } from './project-search/project-search.component';
+import { ParenttaskSearchComponent } from './parenttask-search/parenttask-search.component';
 
 
 @NgModule({
@@ -31,7 +33,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MenuComponent,
     FilterPipe,
     SortPipe,
-    UserSearchComponent
+    UserSearchComponent,
+    ProjectSearchComponent,
+    ParenttaskSearchComponent
     
   ],
   imports: [
@@ -44,7 +48,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatDialogModule,
     BrowserAnimationsModule
   ],
-  entryComponents: [UserSearchComponent],
+  entryComponents: [UserSearchComponent,ProjectSearchComponent,ParenttaskSearchComponent],
   providers: [ParentTaskService,ProjectService,TaskService,UserService],
   bootstrap: [AppComponent]
 })

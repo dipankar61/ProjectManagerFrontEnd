@@ -1,3 +1,120 @@
-<p>
-  addtask works!
-</p>
+<form  [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+  <div class="form-group row" style="padding-left:3rem;" *ngIf="isSuccess">
+      <div class="col-lg-8 " >
+          <div class="alert alert-success" >
+                    {{successMsg}}
+           </div>
+           
+        </div>
+  </div>
+  <div class="form-group row" style="padding-left:3rem;" *ngIf="isError">
+      <div class="col-lg-8" >
+          <div class="alert alert-danger" >
+                    {{errorMsg}}
+           </div>
+           
+        </div>
+  </div>
+<div class="form-group row" style="padding-left:3rem;padding-top:.5rem">
+ 
+    <label  class="control-label col-lg-2" style="text-align: left">Project:</label>
+     <div class="col-lg-5">
+      <input type="text" class="form-control" id="pName"  maxlength="100" formControlName="projName" >
+     </div>
+     <div class="col-lg-1">
+      <button type="button" class="btn btn-sm btn-circle" id="projSearch"(click)="OpenProjectModal()">Search</button>
+      
+     </div>
+  </div>
+  <div class="form-group row" style="padding-left:3rem;">
+  <label  class="control-label col-lg-2" style="text-align: left">Task:</label>
+   <div class="col-lg-6">
+   <input type="text" class="form-control" id="tName"  maxlength="30" formControlName="taskName" >
+      <div *ngIf="(f.taskName.touched && f.taskName.errors)">
+        <div class="alert alert-danger" 
+          *ngIf="f.taskName.errors.required">
+            Task name is required
+         </div>
+         <div class="alert alert-danger" 
+           *ngIf="f.taskName.errors.maxlength">
+            Task name should be max {{ nameField.errors.maxlength.requiredLength }} characters long
+         </div>
+      </div>
+   </div>
+ </div>
+ <div class="form-group row" style="padding-left:3rem;">
+  <div class="col-lg-2" ></div>
+    <div class="col-lg-4 ">
+      <input type="checkbox" class="control-checkbox " name="pChecktask" id="pChecktask" formControlName="parentTaskCheck" 
+      (change)="SetParentTask($event)">
+     
+       <label  class="label-xsmall " style="text-align: left; margin: 4px">Parent Task</label>
+    </div>
+  </div>
+  <div class="form-group row" style="padding-left:3rem;">
+    <label  class="control-label col-lg-2" style="text-align: left">Priority:</label>
+     <div class="col-lg-6">
+      <input type="range" min="0" max="30" class="custom-range" id="inputPriority" 
+       name="inputPriority"    oninput="ageOutputId.value = inputPriority.value" formControlName="Priority">
+      
+      <output name="ageOutputName" id="ageOutputId" >0</output>
+     </div>
+  </div>
+  <div class="form-group row" style="padding-left:3rem;">
+    <label  class="control-label col-lg-2" style="text-align: left">Parent Task:</label>
+     <div class="col-lg-5">
+      <input type="text" class="form-control" id="pName"  maxlength="100" formControlName="parentTask" >
+     </div>
+     <div class="col-lg-1">
+      <button type="button" class="btn btn-sm btn-circle" id="ptaskSearch" (click)="OpenParentTaskModal()">Search</button>
+      
+     </div>
+  </div>
+  <div class="form-group row" style="padding-left:3rem;">
+    <label  class="control-label col-lg-2" style="text-align: left">Start Date:</label>
+     <div class="col-lg-2 ">
+       <input type="date" class="form-control" name="sdate" id="sdate"  placeholder="Start date" formControlName="StartDate">
+     </div>
+     <label  class="control-label " style="text-align: left">End Date:</label>
+     <div class="col-lg-3">
+      <input type="date" class="form-control" name="edate" id="edate" formControlName="EndDate">
+        
+     </div>
+     
+  </div>
+  <div class="form-group row" style="padding-left:3rem;">
+    <div class="col-lg-2" ></div>
+    <div class="col-lg-6" >
+      <div class="alert alert-danger" *ngIf="f.EndDate.errors">End date must be greater than Start date</div>
+    </div>
+  </div>
+  <div class="form-group row" style="padding-left:3rem;">
+    <label  class="control-label col-lg-2" style="text-align: left">User:</label>
+     <div class="col-lg-5">
+      <input type="text" class="form-control" id="us"  maxlength="100" formControlName="UserName" >
+     </div>
+     <div class="col-lg-1">
+      <button type="button" class="btn btn-sm btn-circle" id="usSearch" (click)="OpenUserModal()">Search</button>
+      
+     </div>
+  </div>
+   
+    
+    <div class="form-group row" style="padding-left:3rem;" >
+       <div class="col-lg-2" ></div>
+        <div class="col-lg-1" *ngIf="!isEdit">
+            <button type="submit"  class="btn btn-light btncustom " [disabled]="!taskForm.valid">AddTask</button>
+        </div>
+        
+        <div class="col-lg-1" *ngIf="isEdit">
+            <button type="submit"  class="btn btn-light btncustom " [disabled]="!taskForm.valid">Update</button>
+        </div>
+        <div class="col-lg-1" ></div>
+        <div class="col-lg-1 " *ngIf="!isEdit">
+            <button type="button" class="btn btn-light btncustom" (click)="ResetForm()">Reset</button>
+        </div>
+        <div class="col-lg-1 " *ngIf="isEdit">
+          <button type="button" class="btn btn-light btncustom" (click)="Cancel()">Cancel</button>
+      </div>
+    </div>
+</form>

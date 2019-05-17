@@ -1,0 +1,43 @@
+<div class="form-group row" style="padding-left:3rem;">
+  <h4>Projects</h4>
+ 
+</div>
+<div class="form-group row" style="padding-left:3rem;padding-top:1rem">
+  <div class="col-lg-5">
+    <input type="text" class="form-control" id="inputName"  placeholder="Search" [(ngModel)]="searchParam">
+  </div>
+  
+</div>
+<div class="form-group row" style="padding-left:3rem;" *ngIf="isError">
+  <div class="col-lg-7 col-md-9 col-sm-12" >
+      <div class="alert alert-danger" >
+                {{errorMsg}}
+       </div>
+       
+    </div>
+</div>
+<ul class="list-group-flush">
+  <li class="list-group-item" *ngFor="let project of projects | filter:'Project':searchParam">
+    
+      <div class="form-group row" style="padding-top:.5rem">
+        <div class="col-lg-5">
+          <input type="text" class="form-control" name="pName" [disabled]="true" id="fname" value="{{project.ProjectName}}">
+        </div>
+        <div class="col-lg-2">
+          <input type="button" class="btn btn-light btncustom" value="Select"  (click)="OnSelect(project)">
+        </div>
+      </div>
+      <div class="form-group row" style="padding-top:.5rem">
+        <div class="col-lg-5">
+          <input type="text" class="form-control" name="stdate" [disabled]="true" id="lname" value="{{project.StartDate}}">
+        </div>
+        
+      </div>
+      <div class="form-group row" style="padding-top:.5rem">
+        <div class="col-lg-5">
+          <input type="text" class="form-control" name="edate" [disabled]="true" id="emp" value="{{project.EndDate}}">
+        </div>
+      </div>
+   
+  </li>
+</ul>
