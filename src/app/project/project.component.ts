@@ -44,7 +44,7 @@ export class ProjectComponent implements OnInit {
      
      },
      {
-      validator: DateComparison('StartDate', 'EndDate','SetDate')
+      validator: DateComparison('StartDate', 'EndDate','SetDate','project')
      }
      );
      this.GetAllProjects();
