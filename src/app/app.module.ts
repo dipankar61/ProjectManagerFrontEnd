@@ -46,6 +46,8 @@ import { ParenttaskSearchComponent } from './parenttask-search/parenttask-search
     HttpClientModule,
     MatTableModule,
     MatDialogModule,
+    MatPaginatorModule,
+    MatSortModule,
     BrowserAnimationsModule
   ],
   entryComponents: [UserSearchComponent,ProjectSearchComponent,ParenttaskSearchComponent],

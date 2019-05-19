@@ -14,6 +14,8 @@ export class FilterPipe implements PipeTransform {
       return this.FilterUser(value,args);
     if(key==='Project')
       return this.FilterProject(value,args);
+    if(key==='parenttask')
+      return this.FilterParentTask(value,args);
     else
      return value;
   
@@ -42,9 +44,19 @@ export class FilterPipe implements PipeTransform {
       else
        return true;
     });
+    
 
   }
-  
+  FilterParentTask(value: any[],args:any):any[]{
+    return value.filter(it => {
+      if((it.TaskName.toLowerCase().indexOf(args.toLowerCase()) == -1))
+       return false;
+      else
+       return true;
+    });
+    
+
+  }
   
 
   

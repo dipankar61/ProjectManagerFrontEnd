@@ -57,13 +57,13 @@ export class AddtaskComponent implements OnInit {
     this.taskForm=this.formBuilder.group({
       projName:new FormControl({ value: '', disabled: true },Validators.required),
       taskName:new FormControl('',Validators.required),
-      parentTaskCheck:new FormControl(),
+      parentTaskCheck:new FormControl({value:false,disabled: false}),
       parentTask:new FormControl({ value: '', disabled: true }),
       StartDate:new FormControl({value:this.startDate.toISOString().substring(0,10),disabled: false}),
       EndDate:new FormControl({value:this.endDate.toISOString().substring(0,10),disabled: false}),
       Priority:new FormControl(),
-      UserName:new FormControl({ value: '', disabled: true }),
-      pTaskSearchbtn:new FormControl()
+      UserName:new FormControl({ value: '', disabled: true })
+      
      
      },
      {
@@ -76,6 +76,9 @@ export class AddtaskComponent implements OnInit {
       if(this.TaskId!==undefined && this.TaskId!==null && this.TaskId!=="")
       {
        this.EditMode();
+      }
+      else{
+        this.ResetForm();
       }
     });
   }
@@ -115,7 +118,7 @@ export class AddtaskComponent implements OnInit {
       data: ''
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.selectedUserId = result.ProjectId;
+      this.selectedProjectId = result.ProjectId;
       this.taskForm.patchValue({ projName: result.ProjectName });
       this.IsProjNameValidated=true;
     });
@@ -146,9 +149,16 @@ export class AddtaskComponent implements OnInit {
       this.selectedParentTaskId = result.ParentId;
       this.taskForm.patchValue({ parentTask: result.TaskName });
       }
+      else{
+        this.selectedParentTaskId=null;
+        this.taskForm.patchValue({ parentTask: '' });
+
+      }
     });
   }
   onSubmit(){
+    this.isError=false;
+    this.isSuccess=false;
     if(this.taskForm.value.parentTaskCheck===true)
     {
        this.modelPTask=new ParentTask();
@@ -157,7 +167,7 @@ export class AddtaskComponent implements OnInit {
     }
     else 
     {
-      if(this.SubmitEligibilityCheck)
+      if(this.SubmitEligibilityCheck())
       {
        if(!this.isEdit)
        {
@@ -176,8 +186,8 @@ export class AddtaskComponent implements OnInit {
        this.modelTask.ParentId=this.selectedParentTaskId;
       
        this.modelTask.TaskName=this.taskForm.value.taskName;
-       this.modelTask.StartDate=this.projectForm.value.StartDate;
-       this.modelTask.EndDate=this.projectForm.value.EndDate;
+       this.modelTask.StartDate=this.taskForm.value.StartDate;
+       this.modelTask.EndDate=this.taskForm.value.EndDate;
        if(!this.isEdit)
        {
           this.AddTask()
@@ -193,12 +203,12 @@ export class AddtaskComponent implements OnInit {
   SubmitEligibilityCheck():boolean
   {
     let eligibilityPass:boolean=true;
-    if(!this.taskForm.value.projName)
+    if(!this.selectedProjectId)
     {
       eligibilityPass=false;
       this.IsProjNameValidated=false;
     }
-    if(!this.taskForm.value.UserName)
+    if(!this.selectedUserId)
     {
       eligibilityPass=false;
       this.IsUserNameValidated=false;
@@ -208,29 +218,34 @@ export class AddtaskComponent implements OnInit {
   }
   EditMode()
   {
+    this.isError=false;
+    this.isSuccess=false;
     this.isEdit=true;
     this.GetTask(this.TaskId);
-    this.taskForm.patchValue({
-      taskName: this.modelTask.TaskName,
-      Priority: this.modelTask.Priority,
-      StartDate: this.modelTask.StartDate,
-      EndDate: this.modelTask.EndDate,
-      projName: this.modelTask.ProjectName,
-      UserName:this.modelTask.UserName ,
-      parentTask: this.modelTask.ParentTaskname
-      
-    });
+    
     this.taskForm.get('parentTaskCheck').disable();
-    this.taskForm.get('pTaskSearchbtn').disable();
+    
 
   }
   ResetForm(){
+    this.startDate = new Date();
+    this.endDate = new Date();
+    this.startDate.setDate((this.startDate).getDate());
+    this.endDate.setDate((this.endDate).getDate() + 1);
     this.isError=false;
     this.isSuccess=false;
-    
-    this.taskForm.controls['Priority'].setValue(0);
-    
+    this.isEdit=false;
+    this.isParentTask=false;
     this.taskForm.reset();
+    this.taskForm.controls['Priority'].setValue(0);
+    this.taskForm.get('StartDate').enable();
+      this.taskForm.get('EndDate').enable();
+      this.taskForm.get('Priority').enable();
+      this.taskForm.patchValue({ 
+      StartDate: this.startDate.toISOString().substring(0,10),
+      EndDate: this.endDate.toISOString().substring(0,10)});
+      this.taskForm.get('parentTaskCheck').enable();
+    
   }
   Cancel()
   {
@@ -281,6 +296,16 @@ export class AddtaskComponent implements OnInit {
           this.selectedParentTaskId=this.modelTask.ParentId;
           this.selectedProjectId=this.modelTask.ProjectId;
           this.selectedUserId=this.modelTask.UserId;
+          this.taskForm.patchValue({
+            taskName: this.modelTask.TaskName,
+            Priority: this.modelTask.Priority,
+            StartDate: this.modelTask.StartDate,
+            EndDate: this.modelTask.EndDate,
+            projName: this.modelTask.ProjectName,
+            UserName:this.modelTask.UserName ,
+            parentTask: this.modelTask.ParentTaskname
+            
+          });
 
        
       },
@@ -293,7 +318,7 @@ export class AddtaskComponent implements OnInit {
     if((err.status===500|| err.status===0) )
     {
       this.isError=true;
-      this.errorMsg=orgOfError==="onSubmit"?"System error. Please try again later":"Projects loading failed";
+      this.errorMsg=orgOfError==="onSubmit"?"System error. Please try again later":"Task loading failed";
 
     }
     

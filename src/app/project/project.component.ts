@@ -165,9 +165,10 @@ export class ProjectComponent implements OnInit {
   this.isEdit=false;
   this.model=new Project();
   this.userId=null;
-  this.projectForm.controls['Priority'].setValue(0);
+  
   
   this.projectForm.reset();
+  this.projectForm.controls['Priority'].setValue(0);
 }
   AddProject()
   {

@@ -20,15 +20,15 @@
     <label  class="control-label col-lg-2" style="text-align: left">Project:</label>
      <div class="col-lg-5">
       <input type="text" class="form-control" id="pName"  maxlength="100" formControlName="projName" >
-      <div *ngIf="f.projName.invalid  && (f.projName.dirty || f.projName.touched) && !isParentTask">
-        <div class="alert alert-danger" 
-          *ngIf="f.projName.errors.required">
+      <div *ngIf="!IsProjNameValidated">
+        <div class="alert alert-danger">
+          
             Project name is required
          </div>
         </div>
      </div>
      <div class="col-lg-1">
-      <button type="button" class="btn btn-sm btn-circle" [disabled]="isParentTask" id="projSearch"(click)="OpenProjectModal()" formControlName="pTaskSearchbtn>Search">Search</button>
+      <button type="button" class="btn btn-sm btn-circle" [disabled]="isParentTask || isEdit"  id="projSearch"(click)="OpenProjectModal()">Search</button>
       
      </div>
      
@@ -79,7 +79,7 @@
   </div>
   <div class="form-group row" style="padding-left:3rem;">
     <label  class="control-label col-lg-2" style="text-align: left">Start Date:</label>
-     <div class="col-lg-2 ">
+     <div class="col-lg-3">
        <input type="date" class="form-control" name="sdate" id="sdate" [disabled]="isParentTask" placeholder="Start date" formControlName="StartDate">
      </div>
      <label  class="control-label " style="text-align: left">End Date:</label>
@@ -99,9 +99,9 @@
     <label  class="control-label col-lg-2" style="text-align: left">User:</label>
      <div class="col-lg-5">
       <input type="text" class="form-control" id="us"  maxlength="100" formControlName="UserName" >
-      <div *ngIf="(f.UserName.touched && f.UserName.errors)">
-        <div class="alert alert-danger" 
-          *ngIf="f.UserName.errors.required">
+      <div *ngIf="!IsUserNameValidated">
+        <div class="alert alert-danger" >
+         
             User name is required
          </div>
         </div>
